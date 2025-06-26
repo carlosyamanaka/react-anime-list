@@ -1,9 +1,9 @@
-import CardList from "../components/CardList";
-import Header from "../components/Header";
-import Navbar from "../components/Navbar";
-import SubHeader from "../components/SubHeader";
+import CardList from "../../components/CardList";
+import Header from "../../components/Header";
+import Navbar from "../../components/Navbar";
+import SubHeader from "../../components/SubHeader";
 import { useContext } from "react";
-import { GlobalContext } from "../App";
+import { GlobalContext } from "../../App";
 
 function Main({ cardSelect }) {
   const {

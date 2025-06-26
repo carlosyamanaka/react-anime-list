@@ -1,10 +1,10 @@
-import Header from "../components/Header";
-import InfoCard from "../components/InfoCard";
+import Header from "../../components/Header";
+import InfoCard from "../../components/InfoCard";
 import { useState, useEffect, useContext } from "react";
-import { GlobalContext } from "../App";
+import { GlobalContext } from "../../App";
 import { useParams } from "react-router-dom";
-import SubHeader from "../components/SubHeader";
-import Navbar from "../components/Navbar";
+import SubHeader from "../../components/SubHeader";
+import Navbar from "../../components/Navbar";
 
 function AnimeInfo({ AnimeSearch }) {
   const { searchBar } = useContext(GlobalContext);
