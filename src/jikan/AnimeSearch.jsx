@@ -1,13 +1,13 @@
-import CardList from "../../components/CardList";
-import Header from "../../components/Header";
+import CardList from "../components/CardList";
+import Header from "../components/Header";
 import { useParams } from "react-router-dom";
-import { useEffect, useState, useContext } from "react";
-import SubHeader from "../../components/SubHeader";
-import { GlobalContext } from "../../App";
-import Navbar from "../../components/Navbar";
+import { useEffect, useState } from "react";
+import SubHeader from "../components/SubHeader";
+import { useGlobalContext } from "../contexts";
+import Navbar from "../components/Navbar";
 
 function AnimeSearch({ cardSelect }) {
-  const { searchBar, navReset, paginationReset } = useContext(GlobalContext);
+  const { searchBar, navReset, paginationReset } = useGlobalContext();
   const [contents, setContents] = useState([]);
   const param = useParams();
 

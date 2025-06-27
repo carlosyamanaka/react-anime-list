@@ -1,10 +1,9 @@
 import { NavLink } from "react-router-dom";
-import { useContext } from "react";
-import { GlobalContext } from "../App";
+import { useGlobalContext } from "../contexts";
 
 function Navbar() {
   const { activeNav, genres, navReset, paginationReset } =
-    useContext(GlobalContext);
+    useGlobalContext();
 
   return (
     <nav className={activeNav ? "filter-bar navActive" : "filter-bar"}>

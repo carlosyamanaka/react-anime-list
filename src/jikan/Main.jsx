@@ -1,9 +1,8 @@
-import CardList from "../../components/CardList";
-import Header from "../../components/Header";
-import Navbar from "../../components/Navbar";
-import SubHeader from "../../components/SubHeader";
-import { useContext } from "react";
-import { GlobalContext } from "../../App";
+import CardList from "../components/CardList";
+import Header from "../components/Header";
+import Navbar from "../components/Navbar";
+import SubHeader from "../components/SubHeader";
+import { useGlobalContext } from "../contexts";
 
 function Main({ cardSelect }) {
   const {
@@ -13,7 +12,7 @@ function Main({ cardSelect }) {
     DecreasePage,
     searchBar,
     activeNav,
-  } = useContext(GlobalContext);
+  } = useGlobalContext();
 
   return (
     <>

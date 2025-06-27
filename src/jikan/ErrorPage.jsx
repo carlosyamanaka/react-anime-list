@@ -1,7 +1,7 @@
 import React from "react";
-import Error from "../../components/Error";
-import Navbar from "../../components/Navbar";
-import Header from "../../components/Header";
+import Error from "../components/Error";
+import Navbar from "../components/Navbar";
+import Header from "../components/Header";
 
 function ErrorPage() {
   return (

@@ -1,13 +1,13 @@
-import Header from "../../components/Header";
-import InfoCard from "../../components/InfoCard";
-import { useState, useEffect, useContext } from "react";
-import { GlobalContext } from "../../App";
+import Header from "../components/Header";
+import InfoCard from "../components/InfoCard";
+import { useState, useEffect } from "react";
+import { useGlobalContext } from "../contexts";
 import { useParams } from "react-router-dom";
-import SubHeader from "../../components/SubHeader";
-import Navbar from "../../components/Navbar";
+import SubHeader from "../components/SubHeader";
+import Navbar from "../components/Navbar";
 
 function AnimeInfo({ AnimeSearch }) {
-  const { searchBar } = useContext(GlobalContext);
+  const { searchBar } = useGlobalContext();
 
   const [cardInfo, setCardInfo] = useState([]);
   const params = useParams();

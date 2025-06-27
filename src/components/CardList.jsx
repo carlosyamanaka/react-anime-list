@@ -1,9 +1,8 @@
 import Card from "./Card";
-import { useContext } from "react";
-import { GlobalContext } from "../App";
+import { useGlobalContext } from "../contexts";
 
 function CardList({ items, cardSelect }) {
-  const { activeNav } = useContext(GlobalContext);
+  const { activeNav } = useGlobalContext();
 
   return (
     <>
