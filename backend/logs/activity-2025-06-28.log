@@ -1,0 +1,4 @@
+[2025-06-28T16:19:00.297Z] {"ip":"::1","userAgent":"PostmanRuntime/7.44.1","method":"POST","url":"/login","status":200,"responseTime":"2226ms","user":"anonymous","timestamp":"2025-06-28T16:19:00.297Z"}
+[2025-06-28T16:19:07.241Z] {"ip":"::1","userAgent":"PostmanRuntime/7.44.1","method":"GET","url":"/animes","status":200,"responseTime":"757ms","user":"noob1","timestamp":"2025-06-28T16:19:07.241Z"}
+[2025-06-28T16:19:28.541Z] {"ip":"::1","userAgent":"PostmanRuntime/7.44.1","method":"POST","url":"/animes","status":201,"responseTime":"913ms","user":"noob1","timestamp":"2025-06-28T16:19:28.541Z"}
+[2025-06-28T16:19:39.688Z] {"ip":"::1","userAgent":"PostmanRuntime/7.44.1","method":"GET","url":"/animes","status":200,"responseTime":"757ms","user":"noob1","timestamp":"2025-06-28T16:19:39.688Z"}
