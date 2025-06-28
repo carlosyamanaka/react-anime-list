@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faListUl } from "@fortawesome/free-solid-svg-icons";
 import { useGlobalContext } from "../contexts";
+import UserMenu from "./UserMenu";
 
 function Header() {
   const { openNav, displaySearchBar, navReset, paginationReset } =
@@ -25,9 +26,18 @@ function Header() {
       >
         <h1 className="app-name">ReactAnimeList</h1>
       </Link>
-      <a className="buttonHeader" onClick={displaySearchBar}>
-        <FontAwesomeIcon icon={faSearch} />{" "}
-      </a>
+      <div className="header-right">
+        <a className="buttonHeader" onClick={displaySearchBar}>
+          <FontAwesomeIcon icon={faSearch} />{" "}
+        </a>
+        <a href="myList">
+          <div className="my-list">
+            <FontAwesomeIcon icon={faListUl} />
+            <span>MyList</span>
+          </div>
+        </a>
+        <UserMenu />
+      </div>
     </header>
   );
 }

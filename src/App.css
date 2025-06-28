@@ -58,12 +58,73 @@ img {
   z-index: 10;
 }
 
+.header-right{
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .header a {
   color: white;
   text-decoration: none;
   display: block;
   cursor: pointer;
 }
+
+.my-list{
+  display: flex;
+  flex-direction: column;
+}
+
+.my-list span{
+  font-size: 12px;
+}
+
+.user-menu {
+  position: relative;
+  display: inline-block;
+  color: white;
+  font-weight: 500;
+}
+
+.user-toggle {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem;
+}
+
+.dropdown-user {
+  position: absolute;
+  top: 120%;
+  right: 0;
+  background-color: #191919;
+  border: 1px solid #4044ED;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  min-width: 8rem;
+}
+
+.dropdown-user button {
+  background: none;
+  border: none;
+  color: white;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.dropdown-user button:hover {
+  background-color: #2a2a2a;
+  color: #4044ED;
+}
+
 
 .burger {
   display: block;
@@ -408,9 +469,26 @@ img {
   max-width: 60%;
 }
 
+.card-info-button-list {
+  all: unset; 
+  padding: 0.8rem;
+  background-color: var(--navbar-bg);
+  color: #fff;
+  text-decoration: none;
+  border-radius: 10px;
+  max-width: 60%;
+  cursor: pointer;
+  font-family: "Oswald", sans-serif;
+  font-size: 1rem;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
 .button-box {
   padding: 2rem;
   text-align: center;
+  display: flex;
+  justify-content: space-evenly;
 }
 
 .card-info-text-style-one {

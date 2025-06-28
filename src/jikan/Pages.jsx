@@ -4,6 +4,8 @@ import AnimeInfo from "./AnimeInfo";
 import { useNavigate } from "react-router-dom";
 import AnimeSearch from "./AnimeSearch";
 import AnimeGenre from "./AnimeGenre";
+import Login from "../front/Login";
+import Register from "../front/Register";
 
 function Pages() {
   const navigate = useNavigate();
@@ -12,6 +14,8 @@ function Pages() {
   return (
     <>
       <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/" element={<Main cardSelect={cardSelect} />} />
         <Route path="/:id" element={<AnimeInfo />} />
         <Route
