@@ -8,29 +8,6 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-model Anime {
-  id             Int     @id @default(autoincrement())
-  mal_id         Int     @unique
-  title          String
-  title_japanese String?
-  image_url      String?
-  score          Decimal?
-  rank           Int?
-  popularity     Int?
-  type           String?
-  episodes       Int?
-  year           Int?
-  rating         String?
-  synopsis       String? @db.Text
-  url            String?
-  studios        Json?
-  genres         Json?
-  
-  feedback       Feedback[]
-  
-  @@map("animes")
-}
-
 model User {
   id         Int      @id @default(autoincrement())
   username   String   @unique
@@ -38,17 +15,48 @@ model User {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   
+  userAnimes UserAnime[]
+  
   @@map("users")
+}
+
+model UserAnime {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  mal_id     Int
+  title      String
+  title_japanese String?
+  image_url  String?
+  score      Decimal?
+  rank       Int?
+  popularity Int?
+  type       String?
+  episodes   Int?
+  year       Int?
+  rating     String?
+  synopsis   String? @db.Text
+  url        String?
+  studios    Json?
+  genres     Json?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  
+  user       User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  feedbacks  Feedback[]
+  
+  @@unique([user_id, mal_id])
+  @@map("user_animes")
 }
 
 model Feedback {
   id            Int      @id @default(autoincrement())
-  anime_id      Int?
+  user_anime_id Int
   feedback_text String?  @db.Text
-  score         Decimal? @db.Decimal(3,2)
+  score         Decimal? @db.Decimal(4,2)
   created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
   
-  anime         Anime?   @relation(fields: [anime_id], references: [id])
+  userAnime     UserAnime @relation(fields: [user_anime_id], references: [id], onDelete: Cascade)
   
   @@map("feedback")
 }

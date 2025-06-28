@@ -1,1 +1,11 @@
 [2025-06-28T16:19:14.091Z] {"ip":"::1","userAgent":"PostmanRuntime/7.44.1","method":"POST","url":"/animes","status":403,"responseTime":"2ms","user":"anonymous","timestamp":"2025-06-28T16:19:14.091Z"}
+[2025-06-28T16:48:07.104Z] {"ip":"::1","userAgent":"PostmanRuntime/7.44.1","method":"POST","url":"/animes","status":409,"responseTime":"776ms","user":"noob1","timestamp":"2025-06-28T16:48:07.104Z"}
+[2025-06-28T16:56:29.506Z] {"ip":"::1","userAgent":"PostmanRuntime/7.44.1","method":"POST","url":"/animes","status":500,"responseTime":"1535ms","user":"novouser123","timestamp":"2025-06-28T16:56:29.506Z"}
+[2025-06-28T16:56:48.135Z] {"ip":"::1","userAgent":"PostmanRuntime/7.44.1","method":"POST","url":"/animes","status":500,"responseTime":"1670ms","user":"novouser123","timestamp":"2025-06-28T16:56:48.135Z"}
+[2025-06-28T17:09:01.020Z] {"ip":"::1","userAgent":"PostmanRuntime/7.44.1","method":"POST","url":"/animes/1/feedback","status":404,"responseTime":"3ms","user":"anonymous","timestamp":"2025-06-28T17:09:01.020Z"}
+[2025-06-28T17:09:17.925Z] {"ip":"::1","userAgent":"PostmanRuntime/7.44.1","method":"POST","url":"/animes/1/feedbacks","status":404,"responseTime":"1957ms","user":"novouser123","timestamp":"2025-06-28T17:09:17.925Z"}
+[2025-06-28T17:10:15.054Z] {"ip":"::1","userAgent":"PostmanRuntime/7.44.1","method":"POST","url":"/animes/1/feedbacks","status":404,"responseTime":"757ms","user":"novouser123","timestamp":"2025-06-28T17:10:15.054Z"}
+[2025-06-28T17:11:42.600Z] {"ip":"::1","userAgent":"PostmanRuntime/7.44.1","method":"PUT","url":"/feedbacks/1","status":500,"responseTime":"161ms","user":"novouser123","timestamp":"2025-06-28T17:11:42.600Z"}
+[2025-06-28T17:15:31.750Z] {"ip":"::1","userAgent":"PostmanRuntime/7.44.1","method":"PUT","url":"/feedbacks/1","status":404,"responseTime":"1970ms","user":"novouser123","timestamp":"2025-06-28T17:15:31.750Z"}
+[2025-06-28T17:15:46.093Z] {"ip":"::1","userAgent":"PostmanRuntime/7.44.1","method":"PUT","url":"/feedbacks/1","status":404,"responseTime":"770ms","user":"novouser123","timestamp":"2025-06-28T17:15:46.093Z"}
+[2025-06-28T17:16:07.181Z] {"ip":"::1","userAgent":"PostmanRuntime/7.44.1","method":"PUT","url":"/feedbacks/1","status":500,"responseTime":"2021ms","user":"novouser123","timestamp":"2025-06-28T17:16:07.180Z"}

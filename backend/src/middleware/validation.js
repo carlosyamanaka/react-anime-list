@@ -54,3 +54,21 @@ export const validateUser = (req, res, next) => {
 
     next();
 };
+
+export const validateFeedback = (req, res, next) => {
+    const { feedback_text, score } = req.body;
+
+    if (!feedback_text && !score) {
+        return res.status(400).json({ error: 'feedback_text ou score são obrigatórios' });
+    }
+
+    if (feedback_text && !validator.isLength(feedback_text, { min: 1, max: 1000 })) {
+        return res.status(400).json({ error: 'feedback_text deve ter entre 1 e 1000 caracteres' });
+    }
+
+    if (score && (!validator.isFloat(score.toString()) || parseFloat(score) < 0 || parseFloat(score) > 10)) {
+        return res.status(400).json({ error: 'score deve ser um número entre 0 e 10' });
+    }
+
+    next();
+};
