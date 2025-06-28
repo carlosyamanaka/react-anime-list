@@ -1,24 +1,23 @@
-import bcrypt from 'bcryptjs';
 import { prisma } from '../config/db.js';
+import { SecurityConfig } from '../config/security.js';
 
 export const UserModel = {
     async findByUsername(username) {
-        const user = await prisma.user.findUnique({ where: { username } });
-        return user || null;
+        return await prisma.user.findUnique({ where: { username } });
     },
 
     async create(username, password) {
-        const hashed = await bcrypt.hash(password, 10);
-        const user = await prisma.user.create({
-            data: { username, password: hashed }
+        const hashedPassword = await SecurityConfig.hashPassword(password);
+        return await prisma.user.create({
+            data: { username, password: hashedPassword }
         });
-        return user;
     },
 
     async validatePassword(username, password) {
         const user = await this.findByUsername(username);
         if (!user) return null;
-        const valid = await bcrypt.compare(password, user.password);
-        return valid ? user : null;
+
+        const isValid = await SecurityConfig.comparePassword(password, user.password);
+        return isValid ? user : null;
     }
 };
