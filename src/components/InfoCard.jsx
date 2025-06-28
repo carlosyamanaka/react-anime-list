@@ -104,6 +104,11 @@ function InfoCard({ item }) {
               >
                 More Information
               </a>
+              <button
+                className="card-info-button-list"
+              >
+                Add to My List
+              </button>
             </div>
           </div>
         </div>
