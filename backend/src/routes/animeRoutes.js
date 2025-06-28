@@ -115,51 +115,40 @@ router.put('/animes/:id',
     }
 );
 
-router.delete('/animes/:id',
+router.get('/animes/search',
     authenticateToken,
+    cacheMiddleware(180),
     async (req, res) => {
         try {
-            const { id } = req.params;
+            const { q, name } = req.query;
+            const searchTerm = q || name;
 
-            const result = await UserAnimeModel.delete(id, req.user.id);
-
-            if (result.count === 0) {
-                return res.status(404).json({ error: 'Anime não encontrado na sua lista' });
+            if (!searchTerm) {
+                return res.status(400).json({
+                    error: 'Parâmetro de busca é obrigatório. Use ?q=nome_do_anime ou ?name=nome_do_anime'
+                });
             }
 
-            invalidateCache([
-                `route:/animes:${req.user.id}`,
-                `user_animes:user:${req.user.id}`,
-                `user_anime:id:${id}:user:${req.user.id}`
-            ]);
+            if (searchTerm.length < 2) {
+                return res.status(400).json({
+                    error: 'Termo de busca deve ter pelo menos 2 caracteres'
+                });
+            }
+
+            const animes = await UserAnimeModel.searchByName(searchTerm, req.user.id);
 
             res.json({
-                message: `Anime removido da lista de ${req.user.username}`
+                animes,
+                searchTerm,
+                user: req.user.username,
+                total: animes.length,
+                message: animes.length === 0 ? 'Nenhum anime encontrado com esse nome' : undefined
             });
         } catch (error) {
-            console.error('Erro ao deletar anime:', error);
+            console.error('Erro ao buscar animes:', error);
             res.status(500).json({ error: 'Erro interno do servidor' });
         }
     }
 );
-
-router.get('/profile', authenticateToken, async (req, res) => {
-    try {
-        const animes = await UserAnimeModel.findManyByUser(req.user.id);
-
-        const stats = {
-            user: req.user.username,
-            totalAnimes: animes.length,
-            lastAdded: animes.length > 0 ? animes[0].created_at : null,
-            genres: [...new Set(animes.flatMap(anime => anime.genres || []))],
-            totalGenres: [...new Set(animes.flatMap(anime => anime.genres || []))].length
-        };
-
-        res.json(stats);
-    } catch (error) {
-        console.error('Erro ao buscar perfil:', error);
-        res.status(500).json({ error: 'Erro interno do servidor' });
-    }
-});
 
 export default router;

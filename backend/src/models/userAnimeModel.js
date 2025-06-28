@@ -104,19 +104,45 @@ export const UserAnimeModel = {
         return null;
     },
 
-    async delete(id, userId) {
-        const result = await prisma.userAnime.deleteMany({
-            where: {
-                id: parseInt(id),
-                user_id: userId
-            }
-        });
+    async searchByName(searchTerm, userId) {
+        const cacheKey = cacheManager.generateKey('user_animes_search', 'user', userId, 'term', searchTerm);
 
-        if (result.count > 0) {
-            cacheManager.del(cacheManager.generateKey('user_animes', 'user', userId));
-            cacheManager.del(cacheManager.generateKey('user_anime', 'id', id, 'user', userId));
+        let animes = cacheManager.get(cacheKey);
+        if (animes) {
+            return animes;
         }
 
-        return result;
-    }
+        animes = await prisma.userAnime.findMany({
+            where: {
+                user_id: userId,
+                OR: [
+                    {
+                        title: {
+                            contains: searchTerm,
+                            mode: 'insensitive'
+                        }
+                    },
+                    {
+                        title_japanese: {
+                            contains: searchTerm,
+                            mode: 'insensitive'
+                        }
+                    }
+                ]
+            },
+            include: {
+                feedbacks: {
+                    orderBy: { created_at: 'desc' },
+                    take: 3
+                }
+            },
+            orderBy: [
+                { score: 'desc' },
+                { created_at: 'desc' }
+            ]
+        });
+
+        cacheManager.set(cacheKey, animes, 180); // cache por 3 minutos
+        return animes;
+    },
 };
