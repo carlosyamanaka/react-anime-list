@@ -5,3 +5,4 @@
 [2025-06-28T16:58:36.132Z] {"ip":"::1","userAgent":"PostmanRuntime/7.44.1","endpoint":"/login","method":"POST","status":200,"timestamp":"2025-06-28T16:58:36.132Z","success":"Authentication successful"}
 [2025-06-28T17:09:33.844Z] {"ip":"::1","userAgent":"PostmanRuntime/7.44.1","endpoint":"/register","method":"POST","status":201,"timestamp":"2025-06-28T17:09:33.844Z","success":"Authentication successful"}
 [2025-06-28T17:09:37.348Z] {"ip":"::1","userAgent":"PostmanRuntime/7.44.1","endpoint":"/login","method":"POST","status":200,"timestamp":"2025-06-28T17:09:37.348Z","success":"Authentication successful"}
+[2025-06-28T19:03:44.339Z] {"ip":"::1","userAgent":"PostmanRuntime/7.44.1","endpoint":"/login","method":"POST","status":200,"timestamp":"2025-06-28T19:03:44.339Z","success":"Authentication successful"}

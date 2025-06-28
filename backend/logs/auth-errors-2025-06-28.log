@@ -1,0 +1,1 @@
+[2025-06-28T19:03:39.648Z] {"ip":"::1","userAgent":"PostmanRuntime/7.44.1","endpoint":"/register","method":"POST","status":409,"timestamp":"2025-06-28T19:03:39.647Z","error":"Authentication failed","username":"novouser123"}

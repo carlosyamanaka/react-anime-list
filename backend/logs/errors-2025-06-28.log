@@ -9,3 +9,5 @@
 [2025-06-28T17:15:31.750Z] {"ip":"::1","userAgent":"PostmanRuntime/7.44.1","method":"PUT","url":"/feedbacks/1","status":404,"responseTime":"1970ms","user":"novouser123","timestamp":"2025-06-28T17:15:31.750Z"}
 [2025-06-28T17:15:46.093Z] {"ip":"::1","userAgent":"PostmanRuntime/7.44.1","method":"PUT","url":"/feedbacks/1","status":404,"responseTime":"770ms","user":"novouser123","timestamp":"2025-06-28T17:15:46.093Z"}
 [2025-06-28T17:16:07.181Z] {"ip":"::1","userAgent":"PostmanRuntime/7.44.1","method":"PUT","url":"/feedbacks/1","status":500,"responseTime":"2021ms","user":"novouser123","timestamp":"2025-06-28T17:16:07.180Z"}
+[2025-06-28T19:03:39.655Z] {"ip":"::1","userAgent":"PostmanRuntime/7.44.1","method":"POST","url":"/register","status":409,"responseTime":"2535ms","user":"anonymous","timestamp":"2025-06-28T19:03:39.655Z"}
+[2025-06-28T19:04:08.066Z] {"ip":"::1","userAgent":"PostmanRuntime/7.44.1","method":"POST","url":"/animes","status":409,"responseTime":"772ms","user":"novouser123","timestamp":"2025-06-28T19:04:08.066Z"}
