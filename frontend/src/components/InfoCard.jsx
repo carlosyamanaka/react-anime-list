@@ -1,4 +1,34 @@
+ import axios from "axios";
+
 function InfoCard({ item }) {
+  const handleAddToList = async () => {
+    try {
+      const response = await axios.post("http://localhost:3000/animes", {
+        id: item.id,
+        mal_id: item.mal_id,
+        title: item.title,
+        title_japanese: item.title_japanese,
+        image_url: item.images.jpg.large_image_url,
+        score: item.score,
+        rank: item.rank,
+        popularity: item.popularity,
+        type: item.type,
+        episodes: item.episodes,
+        year: item.year,
+        rating: item.rating,
+        studios: item.studios.map(s => s.name),
+        genres: item.genres.map(g => g.name),
+        synopsis: item.synopsis,
+        url: item.url
+      });
+      console.log("Adicionado com sucesso:", response.data);
+      alert("Adicionado à sua lista!");
+    } catch (error) {
+      console.error("Erro ao adicionar à lista:", error);
+      alert("Erro ao adicionar à lista.");
+    }
+  }
+  
   return (
     <>
       {item.length === 0 && (
@@ -106,6 +136,7 @@ function InfoCard({ item }) {
               </a>
               <button
                 className="card-info-button-list"
+                onClick={handleAddToList}
               >
                 Add to My List
               </button>

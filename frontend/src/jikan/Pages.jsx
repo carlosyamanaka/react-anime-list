@@ -6,6 +6,7 @@ import AnimeSearch from "./AnimeSearch";
 import AnimeGenre from "./AnimeGenre";
 import Login from "../front/Login";
 import Register from "../front/Register";
+import MyList from "../front/MyList";
 
 function Pages() {
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ function Pages() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/myList" element={<MyList/>}/>
         <Route path="/" element={<Main cardSelect={cardSelect} />} />
         <Route path="/:id" element={<AnimeInfo />} />
         <Route

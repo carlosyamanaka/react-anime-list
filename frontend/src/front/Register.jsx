@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./register.css"
 import blueLock from "./assets/blueLock.jpg";
 import dandadan from "./assets/dandadan.jpg";
 import anime from "./assets/anime.jpg";
 import anime3 from "./assets/anime3.jpg";
-import anime2 from "./assets/anime2.jpg"; 
+import anime2 from "./assets/anime2.jpg";
 import anime4 from "./assets/anime4.jpg";
 
 function Register() {
@@ -14,13 +15,21 @@ function Register() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("Username:", username);
-    console.log("Email:", email);
-    console.log("Password:", password);
-    
-    navigate("/login");
+    try {
+      const response = await axios.post("http://localhost:3000/register", {
+        username,
+        password
+      });
+
+      alert("Registered successfully!");
+      navigate("/login");
+
+    } catch (error) {
+      alert("Registration failed: " + error.response.data.error);
+      console.error(error);
+    }
   };
 
   return (
@@ -73,7 +82,7 @@ function Register() {
         <img src={anime4} alt="anime" className="carta carta-6" />
       </div>
     </div>
-    
+
   );
 }
 

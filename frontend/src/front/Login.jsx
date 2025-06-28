@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./login.css"; 
 import blueLock from "./assets/blueLock.jpg";
 import dandadan from "./assets/dandadan.jpg";
@@ -13,13 +14,25 @@ function Login() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    console.log("Username:", username);
-    console.log("Password:", password);
+  const handleLogin = async (e) => {
+  e.preventDefault();
+  try {
+    const response = await axios.post("http://localhost:3000/login", {
+      username,
+      password
+    });
     
+    const token = response.data.token;
+    localStorage.setItem("token", token);
+    localStorage.setItem("username", username);
+    alert("Login successful!");
     navigate("/");
-  };
+
+  } catch (error) {
+    alert("Login failed: " + error.response.data.error);
+    console.error(error);
+  }
+};
 
   return (
     <div className="login-page">
