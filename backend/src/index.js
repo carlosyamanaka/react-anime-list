@@ -1,4 +1,5 @@
 import express from 'express';
+import compression from 'compression';
 import cors from 'cors';
 import animeRoutes from './routes/animeRoutes.js';
 import authRoutes from './routes/authRoutes.js';
@@ -10,10 +11,11 @@ import { sanitizeInput } from './middleware/validation.js';
 import { logAuthentication, logActivity } from './middleware/logger.js';
 
 const app = express();
+app.use(compression())
 const PORT = process.env.PORT || 3000;
 
 // securityMiddleware(app);
-
+app.use(cors())
 app.use(express.json({ limit: '10mb' }));
 app.use(generalRateLimit);
 app.use(sanitizeInput);

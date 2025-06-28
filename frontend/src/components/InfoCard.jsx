@@ -1,34 +1,54 @@
- import axios from "axios";
+import axios from "axios";
 
 function InfoCard({ item }) {
   const handleAddToList = async () => {
     try {
-      const response = await axios.post("http://localhost:3000/animes", {
-        id: item.id,
-        mal_id: item.mal_id,
-        title: item.title,
-        title_japanese: item.title_japanese,
-        image_url: item.images.jpg.large_image_url,
-        score: item.score,
-        rank: item.rank,
-        popularity: item.popularity,
-        type: item.type,
-        episodes: item.episodes,
-        year: item.year,
-        rating: item.rating,
-        studios: item.studios.map(s => s.name),
-        genres: item.genres.map(g => g.name),
-        synopsis: item.synopsis,
-        url: item.url
-      });
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert("Você precisa estar logado para adicionar animes.");
+        return;
+      }
+
+      const response = await axios.post(
+        "http://localhost:3000/animes",
+        {
+          mal_id: item.mal_id,
+          title: item.title,
+          title_japanese: item.title_japanese,
+          image_url: item.images?.jpg?.large_image_url,
+          score: item.score,
+          rank: item.rank,
+          popularity: item.popularity,
+          type: item.type,
+          episodes: item.episodes,
+          year: item.year,
+          rating: item.rating,
+          studios: item.studios.map(s => s.name),
+          genres: item.genres.map(g => g.name),
+          synopsis: item.synopsis,
+          url: item.url
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+
       console.log("Adicionado com sucesso:", response.data);
       alert("Adicionado à sua lista!");
     } catch (error) {
       console.error("Erro ao adicionar à lista:", error);
-      alert("Erro ao adicionar à lista.");
+      if (error.response && error.response.status === 409) {
+        alert("Este anime já está na sua lista.");
+      } else if (error.response && error.response.status === 401) {
+        alert("Você não está autenticado. Faça login.");
+      } else {
+        alert("Erro ao adicionar à lista.");
+      }
     }
   }
-  
+
   return (
     <>
       {item.length === 0 && (

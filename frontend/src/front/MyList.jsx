@@ -13,28 +13,39 @@ function MyList() {
   const [selectedAnime, setSelectedAnime] = useState(null);
 
   useEffect(() => {
-    const fetchMyList = async () => {
-      try {
-        const response = await axios.get("http://localhost:3000/animes");
-        setMyList(response.data);
-      } catch (error) {
-        console.error("Erro ao buscar animes:", error);
-      }
-    };
+  const fetchMyList = async () => {
+    try {
+      const token = localStorage.getItem("token");
 
-    fetchMyList();
-  }, []);
+      if (!token) {
+        alert("Você precisa estar logado para ver sua lista.");
+        return;
+      }
+
+      const response = await axios.get("http://localhost:3000/animes", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      setMyList(response.data.animes);
+    } catch (error) {
+      console.error("Erro ao buscar animes:", error);
+      if (error.response?.status === 401) {
+        alert("Sessão expirada ou não autenticado. Faça login novamente.");
+      } else {
+        alert("Erro ao buscar sua lista.");
+      }
+    }
+  };
+
+  fetchMyList();
+}, []);
 
   const handleSave = (id, note, rating) => {
     const updated = myList.map((item) =>
       item.mal_id === id ? { ...item, note, rating } : item
     );
-    setMyList(updated);
-    localStorage.setItem("myList", JSON.stringify(updated));
-  };
-
-  const removeFromList = (id) => {
-    const updated = myList.filter((item) => item.mal_id !== id);
     setMyList(updated);
     localStorage.setItem("myList", JSON.stringify(updated));
   };
