@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { AnimeModel, Anime } from '../models/animeModel';
+import { AnimeModel } from '../models/animeModel.js';
 
 const router = Router();
 
@@ -14,7 +14,7 @@ router.get('/animes', async (req, res) => {
 
 router.post('/animes', async (req, res) => {
     try {
-        const data: Anime = req.body;
+        const data = req.body;
         const newAnime = await AnimeModel.create(data);
         res.status(201).json(newAnime);
     } catch (error) {

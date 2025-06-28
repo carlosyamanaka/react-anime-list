@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Anime {
+  id             Int     @id @default(autoincrement())
+  mal_id         Int     @unique
+  title          String
+  title_japanese String?
+  image_url      String?
+  score          Decimal?
+  rank           Int?
+  popularity     Int?
+  type           String?
+  episodes       Int?
+  year           Int?
+  rating         String?
+  synopsis       String? @db.Text
+  url            String?
+  studios        Json?
+  genres         Json?
+  
+  feedback       Feedback[]
+  
+  @@map("animes")
+}
+
+model User {
+  id         Int      @id @default(autoincrement())
+  username   String   @unique
+  password   String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  
+  @@map("users")
+}
+
+model Feedback {
+  id            Int      @id @default(autoincrement())
+  anime_id      Int?
+  feedback_text String?  @db.Text
+  score         Decimal? @db.Decimal(3,2)
+  created_at    DateTime @default(now())
+  
+  anime         Anime?   @relation(fields: [anime_id], references: [id])
+  
+  @@map("feedback")
+}
