@@ -1,9 +1,4 @@
-import { useState } from "react";
-
-
 function MyListCard({ item, onClick}) {
-    const [note, setNote] = useState(item.note || "");
-    const [rating, setRating] = useState(item.rating || "");
     return (
         <div className="card" onClick={onClick}>
             <div className="image-section">
