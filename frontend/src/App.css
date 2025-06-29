@@ -672,6 +672,66 @@ img {
   background-color: #163a68;
 }
 
+.myList-page {
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-height: 60vh;
+  margin-top: 2rem;
+  gap: 1.5rem;
+}
+
+.myList-search {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto 1.5rem auto;
+  display: flex;
+  justify-content: center;
+}
+
+.myList-cards-wrapper {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 1rem;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.myList-page .card {
+  margin-top: 0;
+}
+
+.myList-search form {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: 500px;
+  width: 100%;
+}
+
+.myList-search input {
+  flex: 1;
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.myList-search button {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  background-color: var(--navbar-bg);
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.myList-search button:hover {
+  background-color: #163a68;
+}
+
 @media only screen and (min-width: 500px) {
   .filter-bar {
     width: 50vw;

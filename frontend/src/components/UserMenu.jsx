@@ -27,7 +27,7 @@ function UserMenu() {
       {open && (
         <div className="dropdown-user">
           <button onClick={() => navigate("/mylist")}>My List</button>
-          <button onClick={() => navigate("/login")}>Logout</button>
+          <button onClick={() => { localStorage.clear(); navigate("/"); }}>Logout</button>
         </div>
       )}
     </div>

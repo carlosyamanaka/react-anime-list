@@ -24,6 +24,42 @@ router.get('/animes',
     }
 );
 
+router.get('/animes/search',
+    authenticateToken,
+    cacheMiddleware(180),
+    async (req, res) => {
+        try {
+            console.log("Parâmetros de query:", req.query);
+            const { q, name } = req.query;
+            const searchTerm = q || name;            
+            if (!searchTerm) {
+                return res.status(400).json({
+                    error: 'Parâmetro de busca é obrigatório. Use ?q=nome_do_anime ou ?name=nome_do_anime'
+                });
+            }
+
+            if (searchTerm.length < 2) {
+                return res.status(400).json({
+                    error: 'Termo de busca deve ter pelo menos 2 caracteres'
+                });
+            }
+
+            const animes = await UserAnimeModel.searchByName(searchTerm, req.user.id);
+
+            res.json({
+                animes,
+                searchTerm,
+                user: req.user.username,
+                total: animes.length,
+                message: animes.length === 0 ? 'Nenhum anime encontrado com esse nome' : undefined
+            });
+        } catch (error) {
+            console.error('Erro ao buscar animes:', error);
+            res.status(500).json({ error: 'Erro interno do servidor' });
+        }
+    }
+);
+
 router.get('/animes/:id',
     authenticateToken,
     cacheMiddleware(600),
@@ -110,42 +146,6 @@ router.put('/animes/:id',
             });
         } catch (error) {
             console.error('Erro ao atualizar anime:', error);
-            res.status(500).json({ error: 'Erro interno do servidor' });
-        }
-    }
-);
-
-router.get('/animes/search',
-    authenticateToken,
-    cacheMiddleware(180),
-    async (req, res) => {
-        try {
-            const { q, name } = req.query;
-            const searchTerm = q || name;
-
-            if (!searchTerm) {
-                return res.status(400).json({
-                    error: 'Parâmetro de busca é obrigatório. Use ?q=nome_do_anime ou ?name=nome_do_anime'
-                });
-            }
-
-            if (searchTerm.length < 2) {
-                return res.status(400).json({
-                    error: 'Termo de busca deve ter pelo menos 2 caracteres'
-                });
-            }
-
-            const animes = await UserAnimeModel.searchByName(searchTerm, req.user.id);
-
-            res.json({
-                animes,
-                searchTerm,
-                user: req.user.username,
-                total: animes.length,
-                message: animes.length === 0 ? 'Nenhum anime encontrado com esse nome' : undefined
-            });
-        } catch (error) {
-            console.error('Erro ao buscar animes:', error);
             res.status(500).json({ error: 'Erro interno do servidor' });
         }
     }
