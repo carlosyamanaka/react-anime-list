@@ -1,7 +1,7 @@
 import validator from 'validator';
 import xss from 'xss';
 
-const FIELDS_TO_SKIP_ESCAPE = ['image_url', 'url', 'title'];
+const FIELDS_TO_SKIP_ESCAPE = ['image_url', 'url', 'title', 'title_japanese'];
 
 export const sanitizeInput = (req, res, next) => {
     const sanitizeObject = (obj) => {
