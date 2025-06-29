@@ -1,24 +1,27 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { faDedent } from "@fortawesome/free-solid-svg-icons";
 
 function MyListDetails({ item, onSave, onClose }) {
     const [note, setNote] = useState(item.note || "");
     const [rating, setRating] = useState(item.rating || "");
+    const [feedbackId, setFeedbackId] = useState(null);
     const token = localStorage.getItem("token");
 
-    const feedback = item.feedbacks?.[0];
-    const feedbakId = feedback?.id
-
     useEffect(() => {
-        if (feedback) {
-            setNote(feedback.feedback_text || "");
-            setRating(feedback.score?.toString() || "");
-        } else {
-            setNote("");
-            setRating("");
-        }
-    }, [feedback]);
+    async function fetchFeedback() {
+        const res = await axios.get(
+            `http://localhost:3000/animes/${item.id}/feedbacks`,
+            { headers: { Authorization: `Bearer ${token}` } }
+        );
+        const feedback = res.data.feedbacks?.find(
+            fb => String(fb.user_anime_id) === String(item.id)
+        );
+        setNote(feedback?.feedback_text || "");
+        setRating(feedback?.score?.toString() || "");
+        setFeedbackId(feedback.id);
+    }
+    fetchFeedback();
+}, [item.id, token]);
 
     const handleSave = async () => {
         try {
@@ -26,11 +29,10 @@ function MyListDetails({ item, onSave, onClose }) {
                 feedback_text: note.trim(),
                 score: Number(rating),
             };
-
             let response;
-            if (feedbakId) {
+            if (feedbackId) {
                 response = await axios.put(
-                    `http://localhost:3000/feedbacks/${feedback.id}`,
+                    `http://localhost:3000/feedbacks/${feedbackId}`,
                     data,
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
