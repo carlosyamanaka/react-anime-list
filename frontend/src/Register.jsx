@@ -2,12 +2,12 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./register.css"
-import blueLock from "./assets/blueLock.jpg";
-import dandadan from "./assets/dandadan.jpg";
-import anime from "./assets/anime.jpg";
-import anime3 from "./assets/anime3.jpg";
-import anime2 from "./assets/anime2.jpg";
-import anime4 from "./assets/anime4.jpg";
+import blueLock from "./components/assets/blueLock.jpg";
+import dandadan from "./components/assets/dandadan.jpg";
+import anime from "./components/assets/anime.jpg";
+import anime3 from "./components/assets/anime3.jpg";
+import anime2 from "./components/assets/anime2.jpg";
+import anime4 from "./components/assets/anime4.jpg";
 
 function Register() {
   const [username, setUsername] = useState("");

@@ -1,9 +1,9 @@
-import Header from "../components/Header";
-import Navbar from "../components/Navbar";
-import SubHeader from "../components/SubHeader";
-import MyListCard from "../components/MyListCard";
-import MyListDetails from "../components/MyListDetails";
-import { useGlobalContext } from "../contexts";
+import Header from "./components/Header";
+import Navbar from "./components/Navbar";
+import SubHeader from "./components/SubHeader";
+import MyListCard from "./components/MyListCard";
+import MyListDetails from "./components/MyListDetails";
+import { useGlobalContext } from "./contexts";
 import { useEffect, useState } from "react";
 import axios from 'axios'
 

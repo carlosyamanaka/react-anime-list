@@ -1,10 +1,10 @@
-import CardList from "../components/CardList";
-import Header from "../components/Header";
-import Navbar from "../components/Navbar";
-import SubHeader from "../components/SubHeader";
+import CardList from "./components/CardList";
+import Header from "./components/Header";
+import Navbar from "./components/Navbar";
+import SubHeader from "./components/SubHeader";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useGlobalContext } from "../contexts";
+import { useGlobalContext } from "./contexts";
 
 function AnimeGenre({ cardSelect }) {
   const { pagination, IncreasePage, DecreasePage, searchBar, navReset, items } =

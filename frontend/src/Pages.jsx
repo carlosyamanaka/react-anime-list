@@ -4,9 +4,9 @@ import AnimeInfo from "./AnimeInfo";
 import { useNavigate } from "react-router-dom";
 import AnimeSearch from "./AnimeSearch";
 import AnimeGenre from "./AnimeGenre";
-import Login from "../front/Login";
-import Register from "../front/Register";
-import MyList from "../front/MyList";
+import Login from "./Login";
+import Register from "./Register";
+import MyList from "./MyList";
 
 function Pages() {
   const navigate = useNavigate();

@@ -1,7 +1,7 @@
 import validator from 'validator';
 import xss from 'xss';
 
-const FIELDS_TO_SKIP_ESCAPE = ['image_url', 'url', 'logo_url', ];
+const FIELDS_TO_SKIP_ESCAPE = ['image_url', 'url', 'title'];
 
 export const sanitizeInput = (req, res, next) => {
     const sanitizeObject = (obj) => {
@@ -9,7 +9,7 @@ export const sanitizeInput = (req, res, next) => {
         for (const [key, value] of Object.entries(obj)) {
             if (typeof value === 'string') {
                 if (FIELDS_TO_SKIP_ESCAPE.includes(key)) {
-                    sanitized[key] = xss(value); // só xss, sem escape
+                    sanitized[key] = xss(value);
                 } else {
                     sanitized[key] = xss(validator.escape(value));
                 }

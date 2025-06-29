@@ -1,8 +1,8 @@
-import CardList from "../components/CardList";
-import Header from "../components/Header";
-import Navbar from "../components/Navbar";
-import SubHeader from "../components/SubHeader";
-import { useGlobalContext } from "../contexts";
+import CardList from "./components/CardList";
+import Header from "./components/Header";
+import Navbar from "./components/Navbar";
+import SubHeader from "./components/SubHeader";
+import { useGlobalContext } from "./contexts";
 
 function Main({ cardSelect }) {
   const {
