@@ -4,7 +4,6 @@ import cors from 'cors';
 import animeRoutes from './routes/animeRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import cacheRoutes from './routes/cacheRoutes.js';
-import searchRoutes from './routes/searchRoutes.js';
 import feedbackRoutes from './routes/feedbackRoutes.js';
 import { securityMiddleware, generalRateLimit } from './middleware/security.js';
 import { sanitizeInput } from './middleware/validation.js';
@@ -25,7 +24,6 @@ app.use(logActivity);
 app.use('/', authRoutes);
 app.use('/', animeRoutes);
 app.use('/', cacheRoutes);
-app.use('/', searchRoutes);
 app.use('/', feedbackRoutes);
 
 app.listen(PORT, () => {

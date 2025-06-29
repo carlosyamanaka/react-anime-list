@@ -22,7 +22,7 @@ function Header() {
           navReset();
           paginationReset();
         }}
-        to={"/"}
+        to={"/home"}
       >
         <h1 className="app-name">ReactAnimeList</h1>
       </Link>

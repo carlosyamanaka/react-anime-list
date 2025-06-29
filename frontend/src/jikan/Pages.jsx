@@ -15,10 +15,10 @@ function Pages() {
   return (
     <>
       <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/myList" element={<MyList/>}/>
-        <Route path="/" element={<Main cardSelect={cardSelect} />} />
+        <Route path="/home" element={<Main cardSelect={cardSelect} />} />
         <Route path="/:id" element={<AnimeInfo />} />
         <Route
           path="/search/:name"

@@ -13,7 +13,7 @@ function Navbar() {
           paginationReset();
         }}
         className="filter-content"
-        to={`/`}
+        to={`/home`}
       >
         <div>
           <h2>Top Anime</h2>

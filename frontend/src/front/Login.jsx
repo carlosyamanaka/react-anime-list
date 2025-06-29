@@ -26,7 +26,7 @@ function Login() {
     localStorage.setItem("token", token);
     localStorage.setItem("username", username);
     alert("Login successful!");
-    navigate("/");
+    navigate("/home");
 
   } catch (error) {
     alert("Login failed: " + error.response.data.error);
