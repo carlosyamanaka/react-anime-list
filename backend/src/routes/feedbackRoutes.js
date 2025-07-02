@@ -3,6 +3,7 @@ import { FeedbackModel } from '../models/feedbackModel.js';
 import { authenticateToken } from '../middleware/auth.js';
 import { validateFeedback } from '../middleware/validation.js';
 import { cacheMiddleware, invalidateCache } from '../middleware/cache.js';
+import { SecurityConfig } from '../config/security.js';
 
 const router = Router();
 
@@ -13,19 +14,20 @@ router.get('/animes/:animeId/feedbacks',
         try {
             const { animeId } = req.params;
 
-            if (isNaN(animeId)) {
-                return res.status(400).json({ error: 'ID do anime deve ser um número' });
-            }
+            const validatedAnimeId = SecurityConfig.validateNumericId(animeId, 'ID do anime');
 
-            const feedbacks = await FeedbackModel.findManyByUserAnime(animeId);
+            const feedbacks = await FeedbackModel.findManyByUserAnime(validatedAnimeId);
 
             res.json({
                 feedbacks,
-                animeId: parseInt(animeId),
+                animeId: validatedAnimeId,
                 total: feedbacks.length
             });
         } catch (error) {
             console.error('Erro ao buscar feedbacks:', error);
+            if (error.message.includes('ID do anime')) {
+                return res.status(400).json({ error: error.message });
+            }
             res.status(500).json({ error: 'Erro interno do servidor' });
         }
     }
@@ -39,15 +41,13 @@ router.post('/animes/:animeId/feedbacks',
             const { animeId } = req.params;
             const data = req.body;
 
-            if (isNaN(animeId)) {
-                return res.status(400).json({ error: 'ID do anime deve ser um número' });
-            }
+            const validatedAnimeId = SecurityConfig.validateNumericId(animeId, 'ID do anime');
 
-            const newFeedback = await FeedbackModel.create(data, animeId, req.user.id);
+            const newFeedback = await FeedbackModel.create(data, validatedAnimeId, req.user.id);
 
             invalidateCache([
-                `route:/animes/${animeId}/feedbacks:${req.user.id}`,
-                `feedbacks:user_anime:${animeId}`
+                `route:/animes/${validatedAnimeId}/feedbacks:${req.user.id}`,
+                `feedbacks:user_anime:${validatedAnimeId}`
             ]);
 
             res.status(201).json({
@@ -59,6 +59,10 @@ router.post('/animes/:animeId/feedbacks',
 
             if (error.message === 'Anime não encontrado na sua lista') {
                 return res.status(404).json({ error: error.message });
+            }
+
+            if (error.message.includes('ID do anime')) {
+                return res.status(400).json({ error: error.message });
             }
 
             res.status(500).json({ error: 'Erro interno do servidor' });
@@ -73,11 +77,9 @@ router.get('/feedbacks/:id',
         try {
             const { id } = req.params;
 
-            if (isNaN(id)) {
-                return res.status(400).json({ error: 'ID deve ser um número' });
-            }
+            const validatedId = SecurityConfig.validateNumericId(id, 'ID');
 
-            const feedback = await FeedbackModel.findById(id, req.user.id);
+            const feedback = await FeedbackModel.findById(validatedId, req.user.id);
             if (!feedback) {
                 return res.status(404).json({ error: 'Feedback não encontrado' });
             }
@@ -85,6 +87,9 @@ router.get('/feedbacks/:id',
             res.json(feedback);
         } catch (error) {
             console.error('Erro ao buscar feedback:', error);
+            if (error.message.includes('ID')) {
+                return res.status(400).json({ error: error.message });
+            }
             res.status(500).json({ error: 'Erro interno do servidor' });
         }
     }
@@ -98,11 +103,9 @@ router.put('/feedbacks/:id',
             const { id } = req.params;
             const data = req.body;
 
-            if (isNaN(id)) {
-                return res.status(400).json({ error: 'ID deve ser um número' });
-            }
+            const validatedId = SecurityConfig.validateNumericId(id, 'ID');
 
-            const updatedFeedback = await FeedbackModel.update(id, data, req.user.id);
+            const updatedFeedback = await FeedbackModel.update(validatedId, data, req.user.id);
 
             if (!updatedFeedback) {
                 return res.status(404).json({ error: 'Feedback não encontrado' });
@@ -111,7 +114,7 @@ router.put('/feedbacks/:id',
             invalidateCache([
                 `route:/animes/${updatedFeedback.user_anime_id}/feedbacks:${req.user.id}`,
                 `feedbacks:user_anime:${updatedFeedback.user_anime_id}`,
-                `route:/feedbacks/${id}:${req.user.id}`
+                `route:/feedbacks/${validatedId}:${req.user.id}`
             ]);
 
             res.json({
@@ -120,6 +123,9 @@ router.put('/feedbacks/:id',
             });
         } catch (error) {
             console.error('Erro ao atualizar feedback:', error);
+            if (error.message.includes('ID')) {
+                return res.status(400).json({ error: error.message });
+            }
             res.status(500).json({ error: 'Erro interno do servidor' });
         }
     }
@@ -131,11 +137,9 @@ router.delete('/feedbacks/:id',
         try {
             const { id } = req.params;
 
-            if (isNaN(id)) {
-                return res.status(400).json({ error: 'ID deve ser um número' });
-            }
+            const validatedId = SecurityConfig.validateNumericId(id, 'ID');
 
-            const result = await FeedbackModel.delete(id, req.user.id);
+            const result = await FeedbackModel.delete(validatedId, req.user.id);
 
             if (!result) {
                 return res.status(404).json({ error: 'Feedback não encontrado' });
@@ -144,7 +148,7 @@ router.delete('/feedbacks/:id',
             invalidateCache([
                 `route:/animes/${result.user_anime_id}/feedbacks:${req.user.id}`,
                 `feedbacks:user_anime:${result.user_anime_id}`,
-                `route:/feedbacks/${id}:${req.user.id}`
+                `route:/feedbacks/${validatedId}:${req.user.id}`
             ]);
 
             res.json({
@@ -152,6 +156,9 @@ router.delete('/feedbacks/:id',
             });
         } catch (error) {
             console.error('Erro ao deletar feedback:', error);
+            if (error.message.includes('ID')) {
+                return res.status(400).json({ error: error.message });
+            }
             res.status(500).json({ error: 'Erro interno do servidor' });
         }
     }

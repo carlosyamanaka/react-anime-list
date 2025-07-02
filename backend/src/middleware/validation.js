@@ -1,5 +1,6 @@
 import validator from 'validator';
 import xss from 'xss';
+import { SecurityConfig } from '../config/security.js';
 
 const FIELDS_TO_SKIP_ESCAPE = ['image_url', 'url', 'title', 'title_japanese'];
 
@@ -8,22 +9,37 @@ export const sanitizeInput = (req, res, next) => {
         const sanitized = {};
         for (const [key, value] of Object.entries(obj)) {
             if (typeof value === 'string') {
+                const cleanValue = SecurityConfig.sanitizeString(value);
+
                 if (FIELDS_TO_SKIP_ESCAPE.includes(key)) {
-                    sanitized[key] = xss(value);
+                    sanitized[key] = xss(cleanValue);
                 } else {
-                    sanitized[key] = xss(validator.escape(value));
+                    sanitized[key] = xss(validator.escape(cleanValue));
                 }
-            } else if (typeof value === 'object' && value !== null) {
+            } else if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
                 sanitized[key] = sanitizeObject(value);
-                } else {
-                    sanitized[key] = value;
-                }
+            } else if (Array.isArray(value)) {
+                sanitized[key] = value.map(item => {
+                    if (typeof item === 'string') {
+                        return xss(SecurityConfig.sanitizeString(item));
+                    } else if (typeof item === 'object' && item !== null) {
+                        return sanitizeObject(item);
+                    }
+                    return item;
+                });
+            } else {
+                sanitized[key] = value;
             }
-            return sanitized;
-        };
+        }
+        return sanitized;
+    };
 
     if (req.body && typeof req.body === 'object') {
         req.body = sanitizeObject(req.body);
+    }
+
+    if (req.query && typeof req.query === 'object') {
+        req.query = sanitizeObject(req.query);
     }
 
     next();

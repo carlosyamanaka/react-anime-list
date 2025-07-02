@@ -1,9 +1,11 @@
 import { prisma } from '../config/db.js';
 import { cacheManager } from '../config/cache.js';
+import { SecurityConfig } from '../config/security.js';
 
 export const UserAnimeModel = {
     async findManyByUser(userId) {
-        const cacheKey = cacheManager.generateKey('user_animes', 'user', userId);
+        const validatedUserId = SecurityConfig.validateNumericId(userId, 'User ID');
+        const cacheKey = cacheManager.generateKey('user_animes', 'user', validatedUserId);
 
         let animes = cacheManager.get(cacheKey);
         if (animes) {
@@ -11,7 +13,7 @@ export const UserAnimeModel = {
         }
 
         animes = await prisma.userAnime.findMany({
-            where: { user_id: userId },
+            where: { user_id: validatedUserId },
             include: {
                 feedbacks: {
                     orderBy: { created_at: 'desc' },
@@ -26,7 +28,9 @@ export const UserAnimeModel = {
     },
 
     async findById(id, userId) {
-        const cacheKey = cacheManager.generateKey('user_anime', 'id', id, 'user', userId);
+        const validatedId = SecurityConfig.validateNumericId(id, 'Anime ID');
+        const validatedUserId = SecurityConfig.validateNumericId(userId, 'User ID');
+        const cacheKey = cacheManager.generateKey('user_anime', 'id', validatedId, 'user', validatedUserId);
 
         let anime = cacheManager.get(cacheKey);
         if (anime) {
@@ -35,8 +39,8 @@ export const UserAnimeModel = {
 
         anime = await prisma.userAnime.findFirst({
             where: {
-                id: parseInt(id),
-                user_id: userId
+                id: validatedId,
+                user_id: validatedUserId
             },
             include: {
                 feedbacks: {
@@ -53,25 +57,30 @@ export const UserAnimeModel = {
     },
 
     async findByMalId(malId, userId) {
+        const validatedMalId = SecurityConfig.validateNumericId(malId, 'MAL ID');
+        const validatedUserId = SecurityConfig.validateNumericId(userId, 'User ID');
+
         return await prisma.userAnime.findFirst({
             where: {
-                mal_id: parseInt(malId),
-                user_id: userId
+                mal_id: validatedMalId,
+                user_id: validatedUserId
             }
         });
     },
 
     async create(data, userId) {
+        const validatedUserId = SecurityConfig.validateNumericId(userId, 'User ID');
+
         const animeData = {
             ...data,
-            user_id: userId
+            user_id: validatedUserId
         };
 
         const anime = await prisma.userAnime.create({ data: animeData });
 
-        cacheManager.del(cacheManager.generateKey('user_animes', 'user', userId));
+        cacheManager.del(cacheManager.generateKey('user_animes', 'user', validatedUserId));
         cacheManager.set(
-            cacheManager.generateKey('user_anime', 'id', anime.id, 'user', userId),
+            cacheManager.generateKey('user_anime', 'id', anime.id, 'user', validatedUserId),
             anime,
             600
         );

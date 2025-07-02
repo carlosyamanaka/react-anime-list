@@ -14,5 +14,36 @@ export const SecurityConfig = {
 
     async comparePassword(password, hash) {
         return await bcrypt.compare(password, hash);
+    },
+
+    validateNumericId(id, fieldName = 'ID') {
+        if (!id) {
+            throw new Error(`${fieldName} é obrigatório`);
+        }
+
+        const numericId = parseInt(id);
+        if (isNaN(numericId) || numericId <= 0) {
+            throw new Error(`${fieldName} deve ser um número inteiro positivo`);
+        }
+
+        if (numericId > Number.MAX_SAFE_INTEGER) {
+            throw new Error(`${fieldName} é muito grande`);
+        }
+
+        return numericId;
+    },
+
+    sanitizeString(input, maxLength = 1000) {
+        if (typeof input !== 'string') {
+            return '';
+        }
+
+        let sanitized = input.replace(/[\0\x08\x09\x1a\n\r"'\\\%]/g, '');
+
+        if (sanitized.length > maxLength) {
+            sanitized = sanitized.substring(0, maxLength);
+        }
+
+        return sanitized.trim();
     }
 };

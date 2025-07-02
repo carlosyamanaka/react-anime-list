@@ -8,7 +8,7 @@ import { invalidateToken } from '../middleware/auth.js';
 
 const router = Router();
 
-router.post('/login', authRateLimit, validateUser, async (req, res) => {
+router.post('/auth/sessions', authRateLimit, validateUser, async (req, res) => {
     try {
         const { username, password } = req.body;
 
@@ -30,7 +30,7 @@ router.post('/login', authRateLimit, validateUser, async (req, res) => {
     }
 });
 
-router.post('/register', authRateLimit, validateUser, async (req, res) => {
+router.post('/auth/users', authRateLimit, validateUser, async (req, res) => {
     try {
         const { username, password } = req.body;
 
@@ -47,7 +47,7 @@ router.post('/register', authRateLimit, validateUser, async (req, res) => {
     }
 });
 
-router.post('/logout', (req, res) => {
+router.delete('/auth/sessions', (req, res) => {
     const token = req.headers['authorization']?.split(' ')[1];
     if (token) {
         invalidateToken(token);

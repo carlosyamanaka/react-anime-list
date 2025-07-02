@@ -3,6 +3,7 @@ import { UserAnimeModel } from '../models/userAnimeModel.js';
 import { authenticateToken } from '../middleware/auth.js';
 import { validateAnime } from '../middleware/validation.js';
 import { cacheMiddleware, invalidateCache } from '../middleware/cache.js';
+import { SecurityConfig } from '../config/security.js';
 
 const router = Router();
 
@@ -31,24 +32,27 @@ router.get('/animes/search',
         try {
             console.log("Parâmetros de query:", req.query);
             const { q, name } = req.query;
-            const searchTerm = q || name;            
+            const searchTerm = q || name;
             if (!searchTerm) {
                 return res.status(400).json({
                     error: 'Parâmetro de busca é obrigatório. Use ?q=nome_do_anime ou ?name=nome_do_anime'
                 });
             }
 
-            if (searchTerm.length < 2) {
+            // Sanitizar termo de busca para prevenir injection
+            const sanitizedTerm = SecurityConfig.sanitizeString(searchTerm, 100);
+
+            if (sanitizedTerm.length < 2) {
                 return res.status(400).json({
                     error: 'Termo de busca deve ter pelo menos 2 caracteres'
                 });
             }
 
-            const animes = await UserAnimeModel.searchByName(searchTerm, req.user.id);
+            const animes = await UserAnimeModel.searchByName(sanitizedTerm, req.user.id);
 
             res.json({
                 animes,
-                searchTerm,
+                searchTerm: sanitizedTerm,
                 user: req.user.username,
                 total: animes.length,
                 message: animes.length === 0 ? 'Nenhum anime encontrado com esse nome' : undefined
@@ -67,11 +71,10 @@ router.get('/animes/:id',
         try {
             const { id } = req.params;
 
-            if (isNaN(id)) {
-                return res.status(400).json({ error: 'ID deve ser um número' });
-            }
+            // Validação segura do ID para prevenir injection
+            const validatedId = SecurityConfig.validateNumericId(id, 'ID');
 
-            const anime = await UserAnimeModel.findById(id, req.user.id);
+            const anime = await UserAnimeModel.findById(validatedId, req.user.id);
             if (!anime) {
                 return res.status(404).json({ error: 'Anime não encontrado na sua lista' });
             }
@@ -79,6 +82,9 @@ router.get('/animes/:id',
             res.json(anime);
         } catch (error) {
             console.error('Erro ao buscar anime:', error);
+            if (error.message.includes('ID')) {
+                return res.status(400).json({ error: error.message });
+            }
             res.status(500).json({ error: 'Erro interno do servidor' });
         }
     }
@@ -125,10 +131,13 @@ router.put('/animes/:id',
             const { id } = req.params;
             const data = req.body;
 
+            // Validação segura do ID para prevenir injection
+            const validatedId = SecurityConfig.validateNumericId(id, 'ID');
+
             if (data.id) delete data.id;
             if (data.user_id) delete data.user_id;
 
-            const updatedAnime = await UserAnimeModel.update(id, data, req.user.id);
+            const updatedAnime = await UserAnimeModel.update(validatedId, data, req.user.id);
 
             if (!updatedAnime) {
                 return res.status(404).json({ error: 'Anime não encontrado na sua lista' });
@@ -137,7 +146,7 @@ router.put('/animes/:id',
             invalidateCache([
                 `route:/animes:${req.user.id}`,
                 `user_animes:user:${req.user.id}`,
-                `user_anime:id:${id}:user:${req.user.id}`
+                `user_anime:id:${validatedId}:user:${req.user.id}`
             ]);
 
             res.json({
@@ -146,6 +155,9 @@ router.put('/animes/:id',
             });
         } catch (error) {
             console.error('Erro ao atualizar anime:', error);
+            if (error.message.includes('ID')) {
+                return res.status(400).json({ error: error.message });
+            }
             res.status(500).json({ error: 'Erro interno do servidor' });
         }
     }

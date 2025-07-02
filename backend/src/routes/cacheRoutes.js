@@ -4,7 +4,7 @@ import { authenticateToken } from '../middleware/auth.js';
 
 const router = Router();
 
-router.post('/cache/clear', authenticateToken, async (req, res) => {
+router.delete('/cache', authenticateToken, async (req, res) => {
     try {
         cacheManager.flush();
         res.json({ message: 'Cache limpo com sucesso' });
