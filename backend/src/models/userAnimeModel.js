@@ -89,20 +89,23 @@ export const UserAnimeModel = {
     },
 
     async update(id, data, userId) {
+        const validatedId = SecurityConfig.validateNumericId(id, 'Anime ID');
+        const validatedUserId = SecurityConfig.validateNumericId(userId, 'User ID');
+
         const anime = await prisma.userAnime.updateMany({
             where: {
-                id: parseInt(id),
-                user_id: userId
+                id: validatedId,
+                user_id: validatedUserId
             },
             data
         });
 
         if (anime.count > 0) {
-            const updatedAnime = await this.findById(id, userId);
+            const updatedAnime = await this.findById(validatedId, validatedUserId);
 
-            cacheManager.del(cacheManager.generateKey('user_animes', 'user', userId));
+            cacheManager.del(cacheManager.generateKey('user_animes', 'user', validatedUserId));
             cacheManager.set(
-                cacheManager.generateKey('user_anime', 'id', id, 'user', userId),
+                cacheManager.generateKey('user_anime', 'id', validatedId, 'user', validatedUserId),
                 updatedAnime,
                 600
             );
@@ -114,7 +117,14 @@ export const UserAnimeModel = {
     },
 
     async searchByName(searchTerm, userId) {
-        const cacheKey = cacheManager.generateKey('user_animes_search', 'user', userId, 'term', searchTerm);
+        const validatedUserId = SecurityConfig.validateNumericId(userId, 'User ID');
+        const sanitizedTerm = SecurityConfig.sanitizeString(searchTerm, 100);
+
+        if (sanitizedTerm.length < 2) {
+            throw new Error('Termo de busca deve ter pelo menos 2 caracteres após sanitização');
+        }
+
+        const cacheKey = cacheManager.generateKey('user_animes_search', 'user', validatedUserId, 'term', sanitizedTerm);
 
         let animes = cacheManager.get(cacheKey);
         if (animes) {
@@ -123,17 +133,17 @@ export const UserAnimeModel = {
 
         animes = await prisma.userAnime.findMany({
             where: {
-                user_id: userId,
+                user_id: validatedUserId,
                 OR: [
                     {
                         title: {
-                            contains: searchTerm,
+                            contains: sanitizedTerm,
                             mode: 'insensitive'
                         }
                     },
                     {
                         title_japanese: {
-                            contains: searchTerm,
+                            contains: sanitizedTerm,
                             mode: 'insensitive'
                         }
                     }

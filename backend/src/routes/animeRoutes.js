@@ -105,7 +105,8 @@ router.post('/animes', authenticateToken, validateAnime, async (req, res) => {
 
         invalidateCache([
             `route:/animes:${req.user.id}`,
-            `user_animes:user:${req.user.id}`
+            `user_animes:user:${req.user.id}`,
+            `route:/animes/search:${req.user.id}`
         ]);
 
         res.status(201).json({
@@ -146,7 +147,8 @@ router.put('/animes/:id',
             invalidateCache([
                 `route:/animes:${req.user.id}`,
                 `user_animes:user:${req.user.id}`,
-                `user_anime:id:${validatedId}:user:${req.user.id}`
+                `user_anime:id:${validatedId}:user:${req.user.id}`,
+                `route:/animes/search:${req.user.id}`
             ]);
 
             res.json({
