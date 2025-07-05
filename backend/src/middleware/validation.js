@@ -39,7 +39,11 @@ export const sanitizeInput = (req, res, next) => {
     }
 
     if (req.query && typeof req.query === 'object') {
-        req.query = sanitizeObject(req.query);
+        const sanitizedQuery = sanitizeObject(req.query);
+        Object.keys(req.query).forEach(key => {
+            delete req.query[key];
+        });
+        Object.assign(req.query, sanitizedQuery);
     }
 
     next();

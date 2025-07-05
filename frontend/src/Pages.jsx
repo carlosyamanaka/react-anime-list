@@ -16,6 +16,7 @@ function Pages() {
     <>
       <Routes>
         <Route path="/" element={<Login />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/myList" element={<MyList/>}/>
         <Route path="/home" element={<Main cardSelect={cardSelect} />} />
